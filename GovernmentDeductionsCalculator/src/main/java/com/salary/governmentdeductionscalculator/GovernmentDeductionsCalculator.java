@@ -26,18 +26,9 @@ public class GovernmentDeductionsCalculator {
 
     // Pag-IBIG contribution calculation
     public static double calculatePagIbigContribution(double salary) {
-        double employeeContribution = 0.01 * salary; // 1% of salary for below ₱1,500
-        double employerContribution = 0.02 * salary; // 2% of salary for below ₱1,500
-
-        if (salary > 1500) {
-            employeeContribution = 0.02 * salary; // 2% of salary for over ₱1,500
-            employerContribution = 0.02 * salary; // 2% of salary for over ₱1,500
-        }
-
-        double totalContribution = employeeContribution + employerContribution;
-
-        // Ensure that the contribution does not exceed the maximum
-        return Math.min(totalContribution, PAG_IBIG_MAX_CONTRIBUTION);
+        
+      double employeeContribution = (salary <= 1500) ? 0.01 * salary : 0.02 * salary;
+      return Math.min(employeeContribution, PAG_IBIG_MAX_CONTRIBUTION); // Changed code so that the employee share will only be computed and will be viewed
     }
 
     // SSS contribution calculation based on the provided salary ranges
@@ -138,8 +129,9 @@ public class GovernmentDeductionsCalculator {
 
     // PhilHealth contribution calculation (shared between employee and employer)
     public static double calculatePhilHealthContribution(double salary) {
-        double premium = salary * PHILHEALTH_RATE;
-        return Math.min(premium, 1800.0);  // Maximum contribution is capped at 1,800
+        double totalPremium = salary * PHILHEALTH_RATE;
+        double employeeShare = totalPremium / 2; // Employee pays half
+        return Math.min(employeeShare, 900.0);  // Max contribution for employee is half of 1,800
     }
 
     // Withholding Tax Computation (based on provided tax slabs)
@@ -153,7 +145,7 @@ public class GovernmentDeductionsCalculator {
         } else if (taxableIncome <= 66666) {
             tax = 2500 + (taxableIncome - 33332) * 0.25; // ₱2,500 plus 25% of excess over ₱33,333
         } else if (taxableIncome <= 166666) {
-            tax = 10833 + (taxableIncome - 66667) * 0.30; // ₱10,833 plus 30% of excess over ₱66,667
+            tax = 10833 + (taxableIncome - 66666) * 0.30; // ₱10,833 plus 30% of excess over ₱66,666 // Change from 66,667 to 66,666 for consistency
         } else if (taxableIncome <= 666666) {
             tax = 40833.33 + (taxableIncome - 166667) * 0.32; // ₱40,833.33 plus 32% of excess over ₱166,667
         } else {
@@ -167,7 +159,7 @@ public class GovernmentDeductionsCalculator {
         Scanner scanner = new Scanner(System.in);
 
         // Get the employee's gross salary
-        System.out.print("Enter the gross salary of the employee: ₱");
+        System.out.print("Enter the gross salary of the employee: PHP "); // Change Currency symbol to PHP to removed the Error "?"
         double grossSalary = scanner.nextDouble();
 
         // Calculate the government contributions
@@ -188,17 +180,18 @@ public class GovernmentDeductionsCalculator {
         double netIncome = taxableIncome - withholdingTax;
 
         // Display the breakdown
+        // Change Currency symbol to PHP to removed the Error "?"
         System.out.println("\nGovernment Mandated Contributions:");
-        System.out.println("Pag-IBIG Contribution: ₱" + String.format("%.2f", pagIbigContribution));
-        System.out.println("SSS Contribution: ₱" + String.format("%.2f", sssContribution));
-        System.out.println("PhilHealth Contribution: ₱" + String.format("%.2f", philhealthContribution));
-        System.out.println("Total Government Contributions: ₱" + String.format("%.2f", totalContributions));
+        System.out.println("Pag-IBIG Contribution: PHP " + String.format("%.2f", pagIbigContribution)); 
+        System.out.println("SSS Contribution: PHP " + String.format("%.2f", sssContribution));
+        System.out.println("PhilHealth Contribution: PHP " + String.format("%.2f", philhealthContribution));
+        System.out.println("Total Government Contributions: PHP " + String.format("%.2f", totalContributions));
 
         System.out.println("\nWithholding Tax Computation:");
-        System.out.println("Taxable Income: ₱" + String.format("%.2f", taxableIncome));
-        System.out.println("Withholding Tax: ₱" + String.format("%.2f", withholdingTax));
+        System.out.println("Taxable Income: PHP " + String.format("%.2f", taxableIncome));
+        System.out.println("Withholding Tax: PHP " + String.format("%.2f", withholdingTax));
 
-        System.out.println("\nNet Income (Salary after all deductions): ₱" + String.format("%.2f", netIncome));
+        System.out.println("\nNet Income (Salary after all deductions): PHP " + String.format("%.2f", netIncome));
 
         scanner.close();
     }

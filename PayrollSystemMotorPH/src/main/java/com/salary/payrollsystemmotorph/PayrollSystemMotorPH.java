@@ -41,6 +41,7 @@ public class PayrollSystemMotorPH {
     private static final LocalTime GRACE_PERIOD_END = LocalTime.of(8, 10);
     private static final double LUNCH_DURATION_HOURS = 1.0;
     private static final int WORK_DAYS_PER_MONTH = 22; // Average work days in a month
+    private static final String CURRENCY_SYMBOL = "PHP ";
 
     public static void main(String[] args) {
         // Path of the excel file that I use for reference
@@ -113,7 +114,7 @@ public class PayrollSystemMotorPH {
         while (continueSearch) {
             System.out.println("\nOptions:");
             System.out.println("1. Search for employee by Employee #");
-            System.out.println("2. List all available Employee #s");
+            System.out.println("2. List all available Employee #"); // Removed the "s" after #. 
             System.out.println("3. Exit");
             System.out.print("\nEnter your choice (1-3): ");
             
@@ -199,7 +200,7 @@ public class PayrollSystemMotorPH {
         System.out.println("Employee # " + empNumber);
         System.out.println("Name: " + employee.getFullName());
         System.out.println("Birthday: " + employee.getBirthday());
-        System.out.println("Hourly Rate: ₱" + String.format("%.2f", employee.getHourlyRate()));
+        System.out.println("Hourly Rate: PHP " + String.format("%.2f", employee.getHourlyRate())); // Change Currency symbol to PHP to removed the Error "?"
         
         if (employeeWorkData.containsKey(empNumber)) {
             Map<String, WorkHours> weeksData = employeeWorkData.get(empNumber);
@@ -230,13 +231,13 @@ public class PayrollSystemMotorPH {
             
             System.out.println("\nSalary Computation:");
             System.out.println("-----------------------------------------------------------");
-            System.out.printf("Regular Pay (%.2f hrs @ ₱%.2f/hr): ₱%.2f\n", 
+            System.out.printf("Regular Pay (%.2f hrs @ PHP %.2f/hr): PHP %.2f\n", // Change Currency symbol to PHP to removed the Error "?"
                     totalRegularHours, employee.getHourlyRate(), regularPay);
-            System.out.printf("Overtime Pay (%.2f hrs @ ₱%.2f/hr x 1.5): ₱%.2f\n", 
+            System.out.printf("Overtime Pay (%.2f hrs @ PHP %.2f/hr x 1.5): PHP %.2f\n", 
                     totalOvertimeHours, employee.getHourlyRate(), overtimePay);
             System.out.println("-----------------------------------------------------------");
-            System.out.printf("Gross Monthly Salary: ₱%.2f\n", grossMonthlySalary);
-            System.out.printf("Standard Monthly Salary (for %d days): ₱%.2f\n", 
+            System.out.printf("Gross Monthly Salary: PHP %.2f\n", grossMonthlySalary);
+            System.out.printf("Standard Monthly Salary (for %d days): PHP %.2f\n", 
                     WORK_DAYS_PER_MONTH, estimatedMonthlySalary);
         } else {
             System.out.println("\nNo attendance records found for this employee.");
@@ -262,7 +263,7 @@ public class PayrollSystemMotorPH {
             System.out.println("\n===== WEEKLY BREAKDOWN FOR " + employee.getFullName() + " =====");
             System.out.println("-----------------------------------------------------------");
             System.out.printf("%-30s %-10s %-10s %-10s %-12s\n", 
-                    "Week", "Regular", "Overtime", "Total", "Weekly Pay");
+                    "Week", "Regular", "Overtime", "Total", "Weekly Pay (PHP)"); // Change Currency symbol to PHP to removed the Error "?"
             System.out.println("-----------------------------------------------------------");
             
             double totalMonthlyPay = 0;
@@ -283,7 +284,7 @@ public class PayrollSystemMotorPH {
                 double weeklyPay = regularPay + overtimePay;
                 totalMonthlyPay += weeklyPay;
                 
-                System.out.printf("%-30s %-10.2f %-10.2f %-10.2f ₱%-12.2f\n", 
+                System.out.printf("%-30s %-10.2f %-10.2f %-10.2f PHP %-12.2f\n", // Change Currency symbol to PHP to removed the Error "?"
                         weekData.getWeekRange(), weeklyRegular, weeklyOvertime, weeklyTotal, weeklyPay);
             }
             
@@ -292,7 +293,7 @@ public class PayrollSystemMotorPH {
             double totalOvertimeHours = weeksData.values().stream().mapToDouble(WorkHours::getOvertimeHours).sum();
             double totalHours = totalRegularHours + totalOvertimeHours;
             
-            System.out.printf("%-30s %-10.2f %-10.2f %-10.2f ₱%-12.2f\n", 
+            System.out.printf("%-30s %-10.2f %-10.2f %-10.2f PHP %-12.2f\n",  // Change Currency symbol to PHP to removed the Error "?"
                     "Monthly Total:", totalRegularHours, totalOvertimeHours, totalHours, totalMonthlyPay);
             
         } else {
